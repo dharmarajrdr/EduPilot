@@ -18,6 +18,16 @@ public class Instructor extends AuditCreation {
     @OneToMany(mappedBy = "instructor")
     private List<Course> courses;
 
+    private String currentDesignation;
+
+    private String bio;
+
+    @OneToMany(mappedBy = "instructor")
+    private List<Skill> skills;
+
+    @OneToMany
+    private List<Rating> ratings;;
+
     @ManyToMany
     @JoinTable(
             name = "instructor_learner_follow",
