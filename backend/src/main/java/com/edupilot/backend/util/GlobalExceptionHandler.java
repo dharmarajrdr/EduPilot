@@ -53,4 +53,11 @@ public class GlobalExceptionHandler {
                 BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
         );
     }
+
+    @ExceptionHandler(DuplicateCourseByInstructor.class)
+    public ResponseEntity<BaseResponseDto> duplicateCourse(DuplicateCourseByInstructor e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
 }
