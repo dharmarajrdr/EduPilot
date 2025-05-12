@@ -29,4 +29,7 @@ public class User extends AuditCreation {
 
     @OneToMany(mappedBy = "user")
     private List<Reply> replies;
+
+    @OneToMany(mappedBy = "user")
+    private List<Rating> ratings;
 }

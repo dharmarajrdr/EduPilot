@@ -10,8 +10,8 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
 @Entity(name = "instructor")
+@EqualsAndHashCode(callSuper = false)
 public class Instructor extends AuditCreation {
 
     @OneToOne
