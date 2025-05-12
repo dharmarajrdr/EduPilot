@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @MappedSuperclass
 @EqualsAndHashCode(callSuper = false)
-public abstract class BaseModel {
+public class BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

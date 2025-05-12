@@ -1,5 +1,6 @@
 package com.edupilot.backend.model.base;
 
+import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,8 +8,9 @@ import lombok.EqualsAndHashCode;
 import java.time.LocalDateTime;
 
 @Data
+@MappedSuperclass
 @EqualsAndHashCode(callSuper = false)
-public abstract class AuditCreation extends BaseModel {
+public class AuditCreation extends BaseModel {
 
     private LocalDateTime createdAt;
 
