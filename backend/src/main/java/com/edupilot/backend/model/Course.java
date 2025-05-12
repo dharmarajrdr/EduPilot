@@ -1,6 +1,6 @@
 package com.edupilot.backend.model;
 
-import com.edupilot.backend.model.base.AccessRestriction;
+import com.edupilot.backend.model.base.AuditCreation;
 import com.edupilot.backend.model.enums.CourseStatus;
 import com.edupilot.backend.model.enums.LectureAccessMode;
 import com.edupilot.backend.model.enums.SubscriptionType;
@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Course extends AccessRestriction {
+public class Course extends AuditCreation {
 
     @Column(nullable = false)
     private String title;
@@ -38,6 +38,9 @@ public class Course extends AccessRestriction {
     @Enumerated(EnumType.STRING)
     private CourseStatus courseStatus = CourseStatus.DRAFT;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Category category;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LectureAccessMode lectureAccessMode = LectureAccessMode.RANDOM;
@@ -53,5 +56,13 @@ public class Course extends AccessRestriction {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "course")
     private List<Certificate> certificates;
+
+    @ManyToMany
+    @JoinTable(
+            name = "course_tag",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags;
 
 }
