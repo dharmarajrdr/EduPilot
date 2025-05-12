@@ -1,5 +1,6 @@
 package com.edupilot.backend.service.implementation;
 
+import com.edupilot.backend.custom_exception.DuplicateCourseByInstructor;
 import com.edupilot.backend.custom_exception.PermissionDenied;
 import com.edupilot.backend.dto.request.CreateCourseRequestDto;
 import com.edupilot.backend.dto.response.CreateCourseResponseDto;
@@ -23,6 +24,20 @@ public class CourseServiceImpl implements CourseService {
     private final CategoryService categoryService;
     private final TagService tagsService;
 
+    private Category saveCategory(Category category) {
+        if (category == null) {
+            return null;
+        }
+        return categoryService.save(category);
+    }
+
+    private List<Tag> saveTags(List<Tag> tags) {
+        if (tags == null) {
+            return null;
+        }
+        return tagsService.saveAll(tags);
+    }
+
     /**
      * Create a new course
      *
@@ -39,13 +54,17 @@ public class CourseServiceImpl implements CourseService {
         }
 
         Course course = createCourseRequestDto.toCourse();
-        Instructor instructor = instructorService.findInstructorByUserId(userId);
-        Category category = course.getCategory() == null ? null : categoryService.save(course.getCategory());
-        List<Tag> tags = course.getTags() == null ? null : tagsService.saveAll(course.getTags());
-        course.setTags(tags);
+
+        course.setInstructor(instructorService.findInstructorByUserId(userId));
+
+        if (courseRepository.existsCourseByTitleAndInstructor(course.getTitle(), course.getInstructor())) {
+            throw new DuplicateCourseByInstructor(course);
+        }
+
+        course.setCategory(saveCategory(course.getCategory())); // save before referring
+        course.setTags(saveTags(course.getTags()));     // save before referring
         course.setCourseStatus(CourseStatus.DRAFT);
-        course.setCategory(category);
-        course.setInstructor(instructor);
+
         courseRepository.save(course);
         return CreateCourseResponseDto.fromCourse(course);
     }
