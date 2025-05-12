@@ -1,7 +1,6 @@
 package com.edupilot.backend.model;
 
 import com.edupilot.backend.model.base.AuditCreation;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
@@ -10,14 +9,12 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper = false)
-public class Reply extends AuditCreation {
+public class Rating extends AuditCreation {
 
-    @ManyToOne
-    private User user;
+    private Integer score;
 
-    @Column(nullable = false)
     private String message;
 
     @ManyToOne
-    private LectureDiscussion lectureDiscussion;
+    private User user;
 }
