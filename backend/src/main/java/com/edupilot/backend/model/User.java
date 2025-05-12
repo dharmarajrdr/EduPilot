@@ -3,11 +3,17 @@ package com.edupilot.backend.model;
 import com.edupilot.backend.model.base.AuditCreation;
 import com.edupilot.backend.model.enums.UserType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "users")
 public class User extends AuditCreation {
 
@@ -17,7 +23,7 @@ public class User extends AuditCreation {
     @Column(nullable = false)
     private String displayName;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Account account;
 
     @Enumerated(EnumType.STRING)
