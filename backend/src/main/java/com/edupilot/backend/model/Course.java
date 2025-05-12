@@ -1,17 +1,20 @@
 package com.edupilot.backend.model;
 
 import com.edupilot.backend.model.base.AccessRestriction;
-import com.edupilot.backend.model.enums.FileType;
+import com.edupilot.backend.model.enums.CourseStatus;
+import com.edupilot.backend.model.enums.LectureAccessMode;
 import com.edupilot.backend.model.enums.SubscriptionType;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class Course extends AccessRestriction {
 
@@ -30,12 +33,14 @@ public class Course extends AccessRestriction {
     @Column(nullable = false)
     private SubscriptionType subscriptionType = SubscriptionType.FREE;
 
-    @Column(nullable = false)
     private LocalDateTime releasedDate;
 
     @Enumerated(EnumType.STRING)
+    private CourseStatus courseStatus = CourseStatus.DRAFT;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private FileType.LectureAccessMode lectureAccessMode = FileType.LectureAccessMode.RANDOM;
+    private LectureAccessMode lectureAccessMode = LectureAccessMode.RANDOM;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rating> ratings;

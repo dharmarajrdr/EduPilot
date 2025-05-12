@@ -14,6 +14,9 @@ import java.util.UUID;
 public class Lecture extends AuditDeletion {
 
     @Column(nullable = false)
+    private Integer chapterId;
+
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)

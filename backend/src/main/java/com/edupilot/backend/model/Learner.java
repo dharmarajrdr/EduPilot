@@ -2,13 +2,15 @@ package com.edupilot.backend.model;
 
 import com.edupilot.backend.model.base.AccessRestriction;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.util.List;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class Learner extends AccessRestriction {
 
