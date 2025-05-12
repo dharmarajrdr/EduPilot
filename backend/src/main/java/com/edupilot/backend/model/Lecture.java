@@ -26,5 +26,11 @@ public class Lecture extends AuditDeletion {
     private List<LectureAttachment> attachments;
 
     @OneToMany(mappedBy = "lecture")
-    private List<LectureDiscussion> discussions;
+    private List<LectureDiscussion> lectureDiscussions;
+
+    @ManyToOne
+    private Course course;
+
+    @OneToMany(mappedBy = "lecture")
+    private List<LearnerLecture> learnerLectures;
 }
