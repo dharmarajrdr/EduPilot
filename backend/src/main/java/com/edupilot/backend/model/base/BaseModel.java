@@ -8,8 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
 @MappedSuperclass
+@EqualsAndHashCode(callSuper = false)
 public abstract class BaseModel {
 
     @Id
