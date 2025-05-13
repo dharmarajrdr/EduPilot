@@ -4,7 +4,6 @@ import com.edupilot.backend.custom_exception.CourseNotFound;
 import com.edupilot.backend.custom_exception.DuplicateCourseByInstructor;
 import com.edupilot.backend.custom_exception.PermissionDenied;
 import com.edupilot.backend.dto.request.CreateCourseRequestDto;
-import com.edupilot.backend.dto.request.EditCourseRequestDto;
 import com.edupilot.backend.dto.response.CreateCourseResponseDto;
 import com.edupilot.backend.model.*;
 import com.edupilot.backend.model.enums.CourseStatus;
@@ -14,6 +13,7 @@ import com.edupilot.backend.service.interfaces.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -72,29 +72,60 @@ public class CourseServiceImpl implements CourseService {
     }
 
     /**
-     * Update the course info
+     * Update course status
      *
-     * @param editCourseRequestDto
      * @param userId
-     * @return
+     * @param courseId
+     * @param courseStatus
      */
-    @Override
-    public void patchCourse(EditCourseRequestDto editCourseRequestDto, Long userId) {
+    private void updateCourseStatus(Long userId, Long courseId, CourseStatus courseStatus) {
 
         User user = userService.findUserById(userId);
         boolean isInstructor = user.getUserType().equals(UserType.INSTRUCTOR);
+
         if (!isInstructor) {
-            throw new PermissionDenied("You are not allowed to edit a course. Only instructors can edit course.");
+            throw new PermissionDenied("You are not allowed to edit a course. Only instructors can edit this course.");
         }
 
-        Long courseId = editCourseRequestDto.getId();
         Course course = getCourseById(courseId);
         if (!course.getInstructor().getUser().getId().equals(userId)) {
-            throw new PermissionDenied("Permission denied! Only course owner can edit course.");
+            throw new PermissionDenied("Permission denied! Only course owner can edit this course.");
         }
 
-        editCourseRequestDto.patchCourse(course);
+        if (course.getCourseStatus().equals(courseStatus)) {
+            throw new IllegalStateException("The course status is already set to " + courseStatus);
+        }
+
+        if (courseStatus.equals(CourseStatus.PUBLISHED) && course.getReleasedDate() == null) {
+            course.setReleasedDate(LocalDateTime.now());
+        }
+
+        course.setCourseStatus(courseStatus);
         courseRepository.save(course);
+    }
+
+    /**
+     * Publish the course
+     *
+     * @param courseId
+     * @param userId
+     */
+    @Override
+    public void publishCourse(Long courseId, Long userId) {
+
+        updateCourseStatus(userId, courseId, CourseStatus.PUBLISHED);
+    }
+
+    /**
+     * Archive the course
+     *
+     * @param courseId
+     * @param userId
+     */
+    @Override
+    public void archiveCourse(Long courseId, Long userId) {
+
+        updateCourseStatus(userId, courseId, CourseStatus.ARCHIVED);
     }
 
     /**
