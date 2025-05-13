@@ -65,4 +65,9 @@ public class Course extends AuditCreation {
     )
     private List<Tag> tags;
 
+    public boolean isOwner(User user) {
+
+        return instructor.getUser().equals(user);
+    }
+
 }
