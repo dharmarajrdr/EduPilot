@@ -2,6 +2,7 @@ package com.edupilot.backend.service.implementation;
 
 import com.edupilot.backend.custom_exception.InstructorNotFound;
 import com.edupilot.backend.model.Instructor;
+import com.edupilot.backend.model.User;
 import com.edupilot.backend.repository.InstructorRepository;
 import com.edupilot.backend.service.interfaces.InstructorService;
 import lombok.AllArgsConstructor;
@@ -26,13 +27,15 @@ public class InstructorServiceImpl implements InstructorService {
     }
 
     /**
-     * @param userId
+     * Find instructor by user
+     *
+     * @param user
      * @return
      */
     @Override
-    public Instructor findInstructorByUserId(Long userId) {
+    public Instructor findInstructorByUser(User user) {
 
-        return instructorRepository.findInstructorById(userId).orElseThrow(() -> new InstructorNotFound(userId, "user id"));
+        return instructorRepository.findInstructorByUser(user).orElseThrow(() -> new InstructorNotFound(user.getId(), "user id"));
     }
 
     /**

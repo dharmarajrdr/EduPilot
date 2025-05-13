@@ -1,4 +1,4 @@
-package com.edupilot.backend.strategy;
+package com.edupilot.backend.strategy.VideoStorage;
 
 import java.util.UUID;
 

@@ -23,7 +23,7 @@ public class Learner extends AccessRestriction {
     @OneToMany(mappedBy = "learner")
     private List<LearnerLecture> lectures;
 
-    @ManyToMany(mappedBy = "followers")
+    @ManyToMany(mappedBy = "followers", fetch = FetchType.EAGER)
     private List<Instructor> following;
 
     @OneToMany(mappedBy = "learner")

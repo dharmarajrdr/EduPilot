@@ -13,6 +13,9 @@ import com.edupilot.backend.custom_exception.DuplicateCourseByInstructor;
 import com.edupilot.backend.custom_exception.FeatureNotImplementedYet;
 import com.edupilot.backend.custom_exception.FlixifyVideoDeleteException;
 import com.edupilot.backend.custom_exception.InstructorNotFound;
+import com.edupilot.backend.custom_exception.LearnerAlreadyFollowing;
+import com.edupilot.backend.custom_exception.LearnerNotFollowingYet;
+import com.edupilot.backend.custom_exception.LearnerNotFound;
 import com.edupilot.backend.custom_exception.LectureDiscussionNotFound;
 import com.edupilot.backend.custom_exception.LectureNotFound;
 import com.edupilot.backend.custom_exception.NewAdminCreationRestricted;
@@ -135,6 +138,27 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ReplyNotFound.class)
     public ResponseEntity<BaseResponseDto> replyNotFound(ReplyNotFound e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
+
+    @ExceptionHandler(LearnerNotFound.class)
+    public ResponseEntity<BaseResponseDto> learnerNotFound(LearnerNotFound e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
+
+    @ExceptionHandler(LearnerAlreadyFollowing.class)
+    public ResponseEntity<BaseResponseDto> learnerAlreadyFollowing(LearnerAlreadyFollowing e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
+
+    @ExceptionHandler(LearnerNotFollowingYet.class)
+    public ResponseEntity<BaseResponseDto> learnerNotFollowingYet(LearnerNotFollowingYet e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
         );
     }
