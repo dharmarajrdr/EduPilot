@@ -48,4 +48,19 @@ public class CourseController {
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
+
+    @PatchMapping("/archive/{courseId}")
+    public ResponseEntity<BaseResponseDto> archiveCourse(@PathVariable Long courseId, @RequestParam Long userId) {
+
+        EditCourseRequestDto editCourseRequestDto = EditCourseRequestDto.builder()
+                .id(courseId)
+                .status(CourseStatus.ARCHIVED)
+                .build();
+        courseService.patchCourse(editCourseRequestDto, userId);
+        BaseResponseDto responseDto = BaseResponseDto.builder()
+                .message("Course archived successfully.")
+                .status(ResponseStatus.SUCCESS)
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
 }

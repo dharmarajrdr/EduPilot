@@ -38,7 +38,7 @@ public class EditCourseRequestDto {
             course.setCourseStatus(this.status);
         }
 
-        if (this.releasedDate != null) {
+        if (this.releasedDate != null && course.getReleasedDate() == null) {
             course.setReleasedDate(this.releasedDate);
         }
     }
