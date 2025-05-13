@@ -44,10 +44,10 @@ public class LectureDiscussionController {
         return ResponseEntity.status(HttpStatus.OK).body(baseResponseDto);
     }
 
-    @DeleteMapping("/reply")
-    public ResponseEntity<BaseResponseDto> deleteReply(@RequestBody DeleteReplyRequestDto deleteReplyRequestDto, @RequestParam Long userId) {
+    @DeleteMapping("/reply/{replyId}")
+    public ResponseEntity<BaseResponseDto> deleteReply(@PathVariable Long replyId, @RequestParam Long userId) {
 
-        lectureDiscussionService.deleteReply(deleteReplyRequestDto, userId);
+        lectureDiscussionService.deleteReply(replyId, userId);
         BaseResponseDto baseResponseDto = BaseResponseDto.builder().status(ResponseStatus.SUCCESS).message("Reply deleted successfully.").build();
         return ResponseEntity.status(HttpStatus.OK).body(baseResponseDto);
     }
@@ -60,10 +60,10 @@ public class LectureDiscussionController {
         return ResponseEntity.status(HttpStatus.OK).body(baseResponseDto);
     }
 
-    @PatchMapping("/reply")
-    public ResponseEntity<BaseResponseDto> editReply(@RequestBody EditReplyRequestDto editReplyRequestDto, @RequestParam Long userId) {
+    @PatchMapping("/reply/{replyId}")
+    public ResponseEntity<BaseResponseDto> editReply(@PathVariable Long replyId, @RequestBody EditReplyRequestDto editReplyRequestDto, @RequestParam Long userId) {
 
-        ReplyResponseDto replyResponseDto = lectureDiscussionService.editReply(editReplyRequestDto, userId);
+        ReplyResponseDto replyResponseDto = lectureDiscussionService.editReply(replyId, editReplyRequestDto, userId);
         BaseResponseDto baseResponseDto = BaseResponseDto.builder().status(ResponseStatus.SUCCESS).data(replyResponseDto).build();
         return ResponseEntity.status(HttpStatus.OK).body(baseResponseDto);
     }
