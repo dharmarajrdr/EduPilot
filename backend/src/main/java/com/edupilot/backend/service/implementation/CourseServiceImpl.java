@@ -1,8 +1,10 @@
 package com.edupilot.backend.service.implementation;
 
+import com.edupilot.backend.custom_exception.CourseNotFound;
 import com.edupilot.backend.custom_exception.DuplicateCourseByInstructor;
 import com.edupilot.backend.custom_exception.PermissionDenied;
 import com.edupilot.backend.dto.request.CreateCourseRequestDto;
+import com.edupilot.backend.dto.request.EditCourseRequestDto;
 import com.edupilot.backend.dto.response.CreateCourseResponseDto;
 import com.edupilot.backend.model.*;
 import com.edupilot.backend.model.enums.CourseStatus;
@@ -19,10 +21,10 @@ import java.util.List;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
-    private final InstructorService instructorService;
-    private final UserService userService;
     private final CategoryService categoryService;
+    private final InstructorService instructorService;
     private final TagService tagsService;
+    private final UserService userService;
 
     private Category saveCategory(Category category) {
         if (category == null) {
@@ -67,5 +69,43 @@ public class CourseServiceImpl implements CourseService {
 
         courseRepository.save(course);
         return CreateCourseResponseDto.fromCourse(course);
+    }
+
+    /**
+     * Update the course info
+     *
+     * @param editCourseRequestDto
+     * @param userId
+     * @return
+     */
+    @Override
+    public void patchCourse(EditCourseRequestDto editCourseRequestDto, Long userId) {
+
+        User user = userService.findUserById(userId);
+        boolean isInstructor = user.getUserType().equals(UserType.INSTRUCTOR);
+        if (!isInstructor) {
+            throw new PermissionDenied("You are not allowed to edit a course. Only instructors can edit course.");
+        }
+
+        Long courseId = editCourseRequestDto.getId();
+        Course course = getCourseById(courseId);
+        if (!course.getInstructor().getUser().getId().equals(userId)) {
+            throw new PermissionDenied("Permission denied! Only course owner can edit course.");
+        }
+
+        editCourseRequestDto.patchCourse(course);
+        courseRepository.save(course);
+    }
+
+    /**
+     * Get course by id
+     *
+     * @param courseId
+     * @return
+     */
+    @Override
+    public Course getCourseById(Long courseId) {
+
+        return courseRepository.findCourseById(courseId).orElseThrow(() -> new CourseNotFound(courseId));
     }
 }
