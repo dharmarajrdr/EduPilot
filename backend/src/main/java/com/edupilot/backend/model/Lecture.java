@@ -2,14 +2,16 @@ package com.edupilot.backend.model;
 
 import com.edupilot.backend.model.base.AuditDeletion;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class Lecture extends AuditDeletion {
 
@@ -36,4 +38,5 @@ public class Lecture extends AuditDeletion {
 
     @OneToMany(mappedBy = "lecture")
     private List<LearnerLecture> learnerLectures;
+
 }

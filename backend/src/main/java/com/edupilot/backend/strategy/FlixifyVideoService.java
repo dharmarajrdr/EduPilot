@@ -1,6 +1,7 @@
 package com.edupilot.backend.strategy;
 
-import com.edupilot.backend.custom_exception.FeatureNotImplementedYet;
+import java.util.UUID;
+
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.edupilot.backend.dto.request.VideoDeleteRequestDto;
 import com.edupilot.backend.dto.response.VideoDeleteResponseDto;
 import com.edupilot.backend.dto.response.VideoUploadResponseDto;
+import com.edupilot.backend.model.enums.ResponseStatus;
 import com.edupilot.backend.service.interfaces.VideoService;
 
 import lombok.AllArgsConstructor;
@@ -26,7 +28,8 @@ public class FlixifyVideoService implements VideoService {
     @Override
     public VideoUploadResponseDto upload(MultipartFile file) {
 
-        throw new FeatureNotImplementedYet("Upload video to flixify service");
+        return new VideoUploadResponseDto(UUID.randomUUID());
+        // throw new FeatureNotImplementedYet("Upload video to flixify service");
     }
 
     /**
@@ -38,6 +41,7 @@ public class FlixifyVideoService implements VideoService {
     @Override
     public VideoDeleteResponseDto delete(VideoDeleteRequestDto videoDeleteRequestDto) {
 
-        throw new FeatureNotImplementedYet("Delete video from flixify service");
+        return new VideoDeleteResponseDto(ResponseStatus.SUCCESS, "Video deleted successfully.");
+        // throw new FeatureNotImplementedYet("Delete video from flixify service");
     }
 }
