@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class LearnerImpl implements LearnerService {
+public class LearnerServiceImpl implements LearnerService {
 
     private final LearnerRepository learnerRepository;
 
