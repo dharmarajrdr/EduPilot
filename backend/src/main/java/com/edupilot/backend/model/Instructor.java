@@ -2,12 +2,14 @@ package com.edupilot.backend.model;
 
 import com.edupilot.backend.model.base.AuditCreation;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.util.List;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "instructor")
 @EqualsAndHashCode(callSuper = false)
 public class Instructor extends AuditCreation {
