@@ -30,7 +30,7 @@ public class Instructor extends AuditCreation {
     @OneToMany
     private List<Rating> ratings;;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "instructor_learner_follow",
             joinColumns = @JoinColumn(name = "instructor_id"),
