@@ -74,4 +74,18 @@ public class GlobalExceptionHandler {
                 BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
         );
     }
+
+    @ExceptionHandler(LectureNotFound.class)
+    public ResponseEntity<BaseResponseDto> lectureNotFound(LectureNotFound e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
+
+    @ExceptionHandler(FlixifyVideoDeleteException.class)
+    public ResponseEntity<BaseResponseDto> flixifyVideoDelete(FlixifyVideoDeleteException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
 }
