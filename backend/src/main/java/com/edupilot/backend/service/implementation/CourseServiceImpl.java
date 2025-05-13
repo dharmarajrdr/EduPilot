@@ -57,7 +57,7 @@ public class CourseServiceImpl implements CourseService {
 
         Course course = createCourseRequestDto.toCourse();
 
-        course.setInstructor(instructorService.findInstructorByUserId(userId));
+        course.setInstructor(instructorService.findInstructorByUser(user));
 
         if (courseRepository.existsCourseByTitleAndInstructor(course.getTitle(), course.getInstructor())) {
             throw new DuplicateCourseByInstructor(course);
