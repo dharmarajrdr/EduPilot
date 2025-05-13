@@ -2,9 +2,15 @@ package com.edupilot.backend.dto.request;
 
 import com.edupilot.backend.model.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class NotificationDto {
 
@@ -14,5 +20,5 @@ public class NotificationDto {
 
     private String subject;
 
-    private String body;
+    private String message;
 }
