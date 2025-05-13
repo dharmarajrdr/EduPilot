@@ -30,7 +30,7 @@ public class Lecture extends AuditDeletion {
     @ElementCollection
     private List<LectureAttachment> attachments;
 
-    @OneToMany(mappedBy = "lecture")
+    @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LectureDiscussion> lectureDiscussions;
 
     @ManyToOne

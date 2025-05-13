@@ -1,5 +1,6 @@
 package com.edupilot.backend.model;
 
+import com.edupilot.backend.dto.response.CommentResponseDto;
 import com.edupilot.backend.model.base.BaseModel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,6 +21,11 @@ public class LectureDiscussion extends BaseModel {
     @OneToMany(mappedBy = "lectureDiscussion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replies;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Lecture lecture;
+
+    public CommentResponseDto toCommentResponseDto() {
+
+        return CommentResponseDto.builder().message(comment.getMessage()).userName(comment.getUser().getUserName()).createdAt(getComment().getCreatedAt()).discussionId(getId()).build();
+    }
 }
