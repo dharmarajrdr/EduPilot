@@ -1,6 +1,7 @@
 package com.edupilot.backend.controller;
 
 import com.edupilot.backend.dto.request.CreateLectureRequestDto;
+import com.edupilot.backend.dto.request.DeleteLectureRequestDto;
 import com.edupilot.backend.dto.response.BaseResponseDto;
 import com.edupilot.backend.dto.response.CreateLectureResponseDto;
 import com.edupilot.backend.model.enums.ResponseStatus;
@@ -33,5 +34,19 @@ public class LectureController {
                 .data(createLectureResponseDto)
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(baseResponseDto);
+    }
+
+    @DeleteMapping("")
+    public ResponseEntity<BaseResponseDto> deleteLecture(
+            @RequestBody DeleteLectureRequestDto deleteLectureRequestDto,
+            @RequestParam Long userId
+    ) {
+
+        lectureService.deleteLecture(deleteLectureRequestDto, userId);
+        BaseResponseDto baseResponseDto = BaseResponseDto.builder()
+                .message("Lecture deleted successfully")
+                .status(ResponseStatus.SUCCESS)
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(baseResponseDto);
     }
 }
