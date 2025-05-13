@@ -1,12 +1,26 @@
 package com.edupilot.backend.util;
 
-import com.edupilot.backend.custom_exception.*;
-import com.edupilot.backend.dto.response.BaseResponseDto;
-import com.edupilot.backend.model.enums.ResponseStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import com.edupilot.backend.custom_exception.AccountAlreadyRegistered;
+import com.edupilot.backend.custom_exception.ChapterAlreadyExist;
+import com.edupilot.backend.custom_exception.CommentNotFound;
+import com.edupilot.backend.custom_exception.CourseNotFound;
+import com.edupilot.backend.custom_exception.DuplicateCourseByInstructor;
+import com.edupilot.backend.custom_exception.FeatureNotImplementedYet;
+import com.edupilot.backend.custom_exception.FlixifyVideoDeleteException;
+import com.edupilot.backend.custom_exception.InstructorNotFound;
+import com.edupilot.backend.custom_exception.LectureDiscussionNotFound;
+import com.edupilot.backend.custom_exception.LectureNotFound;
+import com.edupilot.backend.custom_exception.NewAdminCreationRestricted;
+import com.edupilot.backend.custom_exception.PermissionDenied;
+import com.edupilot.backend.custom_exception.UserNameAlreadyExist;
+import com.edupilot.backend.custom_exception.UserNotFound;
+import com.edupilot.backend.dto.response.BaseResponseDto;
+import com.edupilot.backend.model.enums.ResponseStatus;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -92,6 +106,27 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FeatureNotImplementedYet.class)
     public ResponseEntity<BaseResponseDto> featureNotSupported(FeatureNotImplementedYet e) {
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
+
+    @ExceptionHandler(ChapterAlreadyExist.class)
+    public ResponseEntity<BaseResponseDto> chapterAlreadyExist(ChapterAlreadyExist e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
+
+    @ExceptionHandler(CommentNotFound.class)
+    public ResponseEntity<BaseResponseDto> commentNotFound(CommentNotFound e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
+
+    @ExceptionHandler(LectureDiscussionNotFound.class)
+    public ResponseEntity<BaseResponseDto> lectureDiscussionNotFound(LectureDiscussionNotFound e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
         );
     }
