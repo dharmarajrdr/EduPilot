@@ -5,7 +5,9 @@ import com.edupilot.backend.dto.response.BaseResponseDto;
 import com.edupilot.backend.dto.response.CommentResponseDto;
 import com.edupilot.backend.dto.response.ReplyResponseDto;
 import com.edupilot.backend.model.enums.ResponseStatus;
+import com.edupilot.backend.service.interfaces.CommentService;
 import com.edupilot.backend.service.interfaces.LectureDiscussionService;
+import com.edupilot.backend.service.interfaces.ReplyService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,9 @@ import java.util.List;
 @RequestMapping("/v1/api/discussion")
 public class LectureDiscussionController {
 
+    private final CommentService commentService;
     private final LectureDiscussionService lectureDiscussionService;
+    private final ReplyService replyService;
 
     @PostMapping("/comment")
     public ResponseEntity<BaseResponseDto> createComment(@RequestBody CreateCommentRequestDto createCommentRequestDto, @RequestParam Long userId) {
@@ -29,10 +33,18 @@ public class LectureDiscussionController {
     }
 
     @DeleteMapping("/comment/{commentId}")
-    public ResponseEntity<BaseResponseDto> deleteComment(@PathVariable Long commentId, @RequestBody DeleteCommentRequestDto deleteCommentRequestDto, @RequestParam Long userId) {
+    public ResponseEntity<BaseResponseDto> deleteComment(@PathVariable Long commentId, @RequestParam Long userId) {
 
-        lectureDiscussionService.deleteComment(commentId, deleteCommentRequestDto, userId);
+        lectureDiscussionService.deleteComment(commentId, userId);
         BaseResponseDto baseResponseDto = BaseResponseDto.builder().status(ResponseStatus.SUCCESS).message("Comment deleted successfully.").build();
+        return ResponseEntity.status(HttpStatus.OK).body(baseResponseDto);
+    }
+
+    @PatchMapping("/comment/{commentId}")
+    public ResponseEntity<BaseResponseDto> editComment(@PathVariable Long commentId, @RequestBody EditCommentRequestDto editCommentRequestDto, @RequestParam Long userId) {
+
+        CommentResponseDto commentResponseDto = commentService.editComment(commentId, editCommentRequestDto, userId);
+        BaseResponseDto baseResponseDto = BaseResponseDto.builder().status(ResponseStatus.SUCCESS).data(commentResponseDto).message("Comment updated successfully.").build();
         return ResponseEntity.status(HttpStatus.OK).body(baseResponseDto);
     }
 
@@ -52,18 +64,10 @@ public class LectureDiscussionController {
         return ResponseEntity.status(HttpStatus.OK).body(baseResponseDto);
     }
 
-    @PatchMapping("/comment/{commentId}")
-    public ResponseEntity<BaseResponseDto> editComment(@PathVariable Long commentId, @RequestBody EditCommentRequestDto editCommentRequestDto, @RequestParam Long userId) {
-
-        CommentResponseDto commentResponseDto = lectureDiscussionService.editComment(commentId, editCommentRequestDto, userId);
-        BaseResponseDto baseResponseDto = BaseResponseDto.builder().status(ResponseStatus.SUCCESS).data(commentResponseDto).message("Comment updated successfully.").build();
-        return ResponseEntity.status(HttpStatus.OK).body(baseResponseDto);
-    }
-
     @PatchMapping("/reply/{replyId}")
     public ResponseEntity<BaseResponseDto> editReply(@PathVariable Long replyId, @RequestBody EditReplyRequestDto editReplyRequestDto, @RequestParam Long userId) {
 
-        ReplyResponseDto replyResponseDto = lectureDiscussionService.editReply(replyId, editReplyRequestDto, userId);
+        ReplyResponseDto replyResponseDto = replyService.editReply(replyId, editReplyRequestDto, userId);
         BaseResponseDto baseResponseDto = BaseResponseDto.builder().status(ResponseStatus.SUCCESS).data(replyResponseDto).build();
         return ResponseEntity.status(HttpStatus.OK).body(baseResponseDto);
     }

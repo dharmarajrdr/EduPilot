@@ -21,8 +21,8 @@ public class LectureDiscussionImpl implements LectureDiscussionService {
     private final CommentService commentService;
     private final LectureService lectureService;
     private final LectureDiscussionRepository lectureDiscussionRepository;
-    private final UserService userService;
     private final ReplyService replyService;
+    private final UserService userService;
 
     /**
      * Create a new comment
@@ -44,6 +44,8 @@ public class LectureDiscussionImpl implements LectureDiscussionService {
     }
 
     /**
+     * Get all the comments in the lecture
+     *
      * @param comment
      * @return
      */
@@ -52,6 +54,12 @@ public class LectureDiscussionImpl implements LectureDiscussionService {
         return lectureDiscussionRepository.findLectureDiscussionByComment(comment).orElseThrow(() -> new LectureDiscussionNotFound(comment));
     }
 
+    /**
+     * Get the lecture discussion by id
+     *
+     * @param id
+     * @return
+     */
     public LectureDiscussion findLectureDiscussionById(Long id) {
 
         return lectureDiscussionRepository.findLectureDiscussionById(id).orElseThrow(() -> new LectureDiscussionNotFound(id));
@@ -61,21 +69,18 @@ public class LectureDiscussionImpl implements LectureDiscussionService {
      * Delete the comment from discussion
      *
      * @param commentId
-     * @param deleteCommentRequestDto
      * @param userId
-     * @return
      */
     @Override
-    public boolean deleteComment(Long commentId, DeleteCommentRequestDto deleteCommentRequestDto, Long userId) {
+    public void deleteComment(Long commentId, Long userId) {
 
         User user = userService.findUserById(userId);
         Comment comment = commentService.findCommentById(commentId);
-        if (!comment.getUser().equals(user)) {
+        if (!comment.isAuthor(user)) {
             throw new PermissionDenied("You don't have permission to delete this comment");
         }
         LectureDiscussion lectureDiscussion = findLectureDiscussionByComment(comment);
-        lectureDiscussionRepository.delete(lectureDiscussion);
-        return true;
+        lectureDiscussionRepository.delete(lectureDiscussion);  // deleting comments + replies as a whole discussion
     }
 
     /**
@@ -102,49 +107,14 @@ public class LectureDiscussionImpl implements LectureDiscussionService {
      * @return
      */
     @Override
-    public boolean deleteReply(Long replyId, Long userId) {
+    public void deleteReply(Long replyId, Long userId) {
 
         User user = userService.findUserById(userId);
         Reply reply = replyService.findById(replyId);
-        if (!reply.getUser().equals(user)) {
-            throw new PermissionDenied("You don't have permission to delete this comment");
+        if (!reply.isAuthor(user)) {
+            throw new PermissionDenied("You don't have permission to delete this reply.");
         }
         replyService.deleteReply(replyId);
-        return true;
-    }
-
-    /**
-     * Edit the comment
-     *
-     * @param editCommentRequestDto
-     * @param userId
-     * @return
-     */
-    @Override
-    public CommentResponseDto editComment(Long commentId, EditCommentRequestDto editCommentRequestDto, Long userId) {
-
-        User user = userService.findUserById(userId);
-        Comment comment = editCommentRequestDto.patchComment(commentService.findCommentById(commentId));
-        if (!comment.getUser().equals(user)) {
-            throw new PermissionDenied("You don't have permission to edit this comment.");
-        }
-        return CommentResponseDto.fromComment(commentService.save(comment));
-    }
-
-    /**
-     * @param editReplyRequestDto
-     * @param userId
-     * @return
-     */
-    @Override
-    public ReplyResponseDto editReply(Long replyId, EditReplyRequestDto editReplyRequestDto, Long userId) {
-
-        User user = userService.findUserById(userId);
-        Reply reply = editReplyRequestDto.patchReply(replyService.findById(replyId));
-        if (!reply.getUser().equals(user)) {
-            throw new PermissionDenied("You don't have permission to edit this reply.");
-        }
-        return ReplyResponseDto.fromReply(replyService.save(reply));
     }
 
     /**

@@ -21,4 +21,9 @@ public class Comment extends AuditCreation {
 
     @Column(nullable = false)
     private String message;
+
+    public boolean isAuthor(User user) {
+
+        return this.user.equals(user);
+    }
 }

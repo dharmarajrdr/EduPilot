@@ -10,15 +10,11 @@ public interface LectureDiscussionService {
 
     CommentResponseDto createComment(CreateCommentRequestDto createCommentRequestDto, Long userId);
 
-    boolean deleteComment(Long commentId, DeleteCommentRequestDto deleteCommentRequestDto, Long userId);
+    void deleteComment(Long commentId, Long userId);
 
     ReplyResponseDto addReply(AddReplyRequestDto addReplyRequestDto, Long userId);
 
-    boolean deleteReply(Long replyId, Long userId);
-
-    CommentResponseDto editComment(Long commentId, EditCommentRequestDto editCommentRequestDto, Long userId);
-
-    ReplyResponseDto editReply(Long replyId, EditReplyRequestDto editReplyRequestDto, Long userId);
+    void deleteReply(Long replyId, Long userId);
 
     List<CommentResponseDto> getDiscussions(Long courseId, Long lectureId, Long userId);
 

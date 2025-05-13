@@ -22,4 +22,9 @@ public class Reply extends AuditCreation {
 
     @ManyToOne
     private LectureDiscussion lectureDiscussion;
+
+    public boolean isAuthor(User user) {
+
+        return this.user.equals(user);
+    }
 }
