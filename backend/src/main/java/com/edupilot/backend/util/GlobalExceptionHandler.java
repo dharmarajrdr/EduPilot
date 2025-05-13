@@ -60,4 +60,18 @@ public class GlobalExceptionHandler {
                 BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
         );
     }
+
+    @ExceptionHandler(CourseNotFound.class)
+    public ResponseEntity<BaseResponseDto> courseNotFound(CourseNotFound e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<BaseResponseDto> illegalState(IllegalStateException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
 }
