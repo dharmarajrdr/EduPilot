@@ -14,11 +14,11 @@ public interface LectureDiscussionService {
 
     ReplyResponseDto addReply(AddReplyRequestDto addReplyRequestDto, Long userId);
 
-    boolean deleteReply(DeleteReplyRequestDto deleteReplyRequestDto, Long userId);
+    boolean deleteReply(Long replyId, Long userId);
 
     CommentResponseDto editComment(Long commentId, EditCommentRequestDto editCommentRequestDto, Long userId);
 
-    ReplyResponseDto editReply(EditReplyRequestDto editReplyRequestDto, Long userId);
+    ReplyResponseDto editReply(Long replyId, EditReplyRequestDto editReplyRequestDto, Long userId);
 
     List<CommentResponseDto> getDiscussions(Long courseId, Long lectureId, Long userId);
 

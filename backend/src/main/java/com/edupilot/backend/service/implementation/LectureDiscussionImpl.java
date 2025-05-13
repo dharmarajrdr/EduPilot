@@ -11,6 +11,7 @@ import com.edupilot.backend.service.interfaces.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +22,7 @@ public class LectureDiscussionImpl implements LectureDiscussionService {
     private final LectureService lectureService;
     private final LectureDiscussionRepository lectureDiscussionRepository;
     private final UserService userService;
+    private final ReplyService replyService;
 
     /**
      * Create a new comment
@@ -50,6 +52,11 @@ public class LectureDiscussionImpl implements LectureDiscussionService {
         return lectureDiscussionRepository.findLectureDiscussionByComment(comment).orElseThrow(() -> new LectureDiscussionNotFound(comment));
     }
 
+    public LectureDiscussion findLectureDiscussionById(Long id) {
+
+        return lectureDiscussionRepository.findLectureDiscussionById(id).orElseThrow(() -> new LectureDiscussionNotFound(id));
+    }
+
     /**
      * Delete the comment from discussion
      *
@@ -62,8 +69,6 @@ public class LectureDiscussionImpl implements LectureDiscussionService {
     public boolean deleteComment(Long commentId, DeleteCommentRequestDto deleteCommentRequestDto, Long userId) {
 
         User user = userService.findUserById(userId);
-//        Course course = courseService.getCourseById(deleteCommentRequestDto.getCourseId());
-//        Lecture lecture = lectureService.findLectureByIdAndCourseId(deleteCommentRequestDto.getLectureId(), deleteCommentRequestDto.getCourseId());
         Comment comment = commentService.findCommentById(commentId);
         if (!comment.getUser().equals(user)) {
             throw new PermissionDenied("You don't have permission to delete this comment");
@@ -74,25 +79,38 @@ public class LectureDiscussionImpl implements LectureDiscussionService {
     }
 
     /**
+     * Add a reply to a comment
+     *
      * @param addReplyRequestDto
      * @param userId
      * @return
      */
     @Override
     public ReplyResponseDto addReply(AddReplyRequestDto addReplyRequestDto, Long userId) {
-        return null;
+
+        User user = userService.findUserById(userId);
+        LectureDiscussion lectureDiscussion = findLectureDiscussionById(addReplyRequestDto.getLectureDiscussionId());
+        Reply reply = replyService.save(Reply.builder().user(user).message(addReplyRequestDto.getMessage()).lectureDiscussion(lectureDiscussion).build());
+        return ReplyResponseDto.fromReply(reply);
     }
 
     /**
      * Delete the reply
      *
-     * @param deleteReplyRequestDto
+     * @param replyId
      * @param userId
      * @return
      */
     @Override
-    public boolean deleteReply(DeleteReplyRequestDto deleteReplyRequestDto, Long userId) {
-        return false;
+    public boolean deleteReply(Long replyId, Long userId) {
+
+        User user = userService.findUserById(userId);
+        Reply reply = replyService.findById(replyId);
+        if (!reply.getUser().equals(user)) {
+            throw new PermissionDenied("You don't have permission to delete this comment");
+        }
+        replyService.deleteReply(replyId);
+        return true;
     }
 
     /**
@@ -119,11 +137,19 @@ public class LectureDiscussionImpl implements LectureDiscussionService {
      * @return
      */
     @Override
-    public ReplyResponseDto editReply(EditReplyRequestDto editReplyRequestDto, Long userId) {
-        return null;
+    public ReplyResponseDto editReply(Long replyId, EditReplyRequestDto editReplyRequestDto, Long userId) {
+
+        User user = userService.findUserById(userId);
+        Reply reply = editReplyRequestDto.patchReply(replyService.findById(replyId));
+        if (!reply.getUser().equals(user)) {
+            throw new PermissionDenied("You don't have permission to edit this reply.");
+        }
+        return ReplyResponseDto.fromReply(replyService.save(reply));
     }
 
     /**
+     * Get all the discussions
+     *
      * @param courseId
      * @param lectureId
      * @param userId
@@ -131,10 +157,19 @@ public class LectureDiscussionImpl implements LectureDiscussionService {
      */
     @Override
     public List<CommentResponseDto> getDiscussions(Long courseId, Long lectureId, Long userId) {
-        return List.of();
+
+        Lecture lecture = lectureService.findLectureByIdAndCourseId(lectureId, courseId);
+        List<LectureDiscussion> lectureDiscussions = lectureDiscussionRepository.findLectureDiscussionsByLectureOrderByIdDesc(lecture);
+        List<CommentResponseDto> discussions = new ArrayList<>();
+        for (LectureDiscussion discussion : lectureDiscussions) {
+            discussions.add(discussion.toCommentResponseDto());
+        }
+        return discussions;
     }
 
     /**
+     * Get replies for a comment
+     *
      * @param courseId
      * @param lectureId
      * @param commentId
@@ -143,6 +178,14 @@ public class LectureDiscussionImpl implements LectureDiscussionService {
      */
     @Override
     public List<ReplyResponseDto> getReplies(Long courseId, Long lectureId, Long commentId, Long userId) {
-        return List.of();
+
+        Comment comment = commentService.findCommentById(commentId);
+        LectureDiscussion lectureDiscussion = findLectureDiscussionByComment(comment);
+        List<Reply> replies = lectureDiscussion.getReplies();
+        List<ReplyResponseDto> replyResponseDtos = new ArrayList<>();
+        for (Reply reply : replies) {
+            replyResponseDtos.add(ReplyResponseDto.fromReply(reply));
+        }
+        return replyResponseDtos;
     }
 }
