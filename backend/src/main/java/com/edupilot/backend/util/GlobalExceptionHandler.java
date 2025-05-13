@@ -88,4 +88,11 @@ public class GlobalExceptionHandler {
                 BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
         );
     }
+
+    @ExceptionHandler(FeatureNotImplementedYet.class)
+    public ResponseEntity<BaseResponseDto> featureNotSupported(FeatureNotImplementedYet e) {
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
 }
