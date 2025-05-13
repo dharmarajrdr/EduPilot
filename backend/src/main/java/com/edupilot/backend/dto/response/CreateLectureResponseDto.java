@@ -22,12 +22,15 @@ public class CreateLectureResponseDto {
 
     private Long courseId;
 
+    private Integer chapterId;
+
     public static CreateLectureResponseDto fromLecture(Lecture lecture) {
 
         return CreateLectureResponseDto.builder()
                 .title(lecture.getTitle())
                 .description(lecture.getDescription())
                 .videoId(lecture.getVideoId())
+                .chapterId(lecture.getChapterId())
                 .courseId(lecture.getCourse().getId())
                 .build();
     }
