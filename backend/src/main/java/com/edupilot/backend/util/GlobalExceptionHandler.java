@@ -17,6 +17,7 @@ import com.edupilot.backend.custom_exception.LectureDiscussionNotFound;
 import com.edupilot.backend.custom_exception.LectureNotFound;
 import com.edupilot.backend.custom_exception.NewAdminCreationRestricted;
 import com.edupilot.backend.custom_exception.PermissionDenied;
+import com.edupilot.backend.custom_exception.ReplyNotFound;
 import com.edupilot.backend.custom_exception.UserNameAlreadyExist;
 import com.edupilot.backend.custom_exception.UserNotFound;
 import com.edupilot.backend.dto.response.BaseResponseDto;
@@ -126,6 +127,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(LectureDiscussionNotFound.class)
     public ResponseEntity<BaseResponseDto> lectureDiscussionNotFound(LectureDiscussionNotFound e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
+
+    @ExceptionHandler(ReplyNotFound.class)
+    public ResponseEntity<BaseResponseDto> replyNotFound(ReplyNotFound e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
         );
