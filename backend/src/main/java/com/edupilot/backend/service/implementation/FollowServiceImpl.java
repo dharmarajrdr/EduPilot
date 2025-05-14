@@ -4,7 +4,6 @@ import com.edupilot.backend.custom_exception.LearnerAlreadyFollowing;
 import com.edupilot.backend.custom_exception.LearnerNotFollowingYet;
 import com.edupilot.backend.model.Instructor;
 import com.edupilot.backend.model.Learner;
-import com.edupilot.backend.model.User;
 import com.edupilot.backend.repository.InstructorRepository;
 import com.edupilot.backend.service.interfaces.FollowService;
 import com.edupilot.backend.service.interfaces.InstructorService;
@@ -14,7 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor

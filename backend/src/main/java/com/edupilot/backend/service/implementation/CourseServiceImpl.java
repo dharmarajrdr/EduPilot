@@ -2,6 +2,7 @@ package com.edupilot.backend.service.implementation;
 
 import com.edupilot.backend.custom_exception.CourseNotFound;
 import com.edupilot.backend.custom_exception.DuplicateCourseByInstructor;
+import com.edupilot.backend.custom_exception.InstructorNotFound;
 import com.edupilot.backend.custom_exception.PermissionDenied;
 import com.edupilot.backend.dto.request.CreateCourseRequestDto;
 import com.edupilot.backend.dto.request.NotificationDto;
@@ -69,7 +70,12 @@ public class CourseServiceImpl implements CourseService {
 
         Course course = createCourseRequestDto.toCourse();
 
-        course.setInstructor(instructorService.findInstructorByUser(user));
+        Instructor instructor = instructorService.findInstructorByUser(user);
+        course.setInstructor(instructor);
+
+        if (!instructor.isVerified()) {
+            throw new PermissionDenied("Your profile is not verified yet. Please contact your administrator.");
+        }
 
         if (courseRepository.existsCourseByTitleAndInstructor(course.getTitle(), course.getInstructor())) {
             throw new DuplicateCourseByInstructor(course);
