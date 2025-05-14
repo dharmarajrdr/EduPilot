@@ -27,6 +27,8 @@ public class CreateCourseRequestDto {
 
     private List<String> tags;
 
+    private double price = 0.0;
+
     public Course toCourse() {
 
         List<Tag> tags = new ArrayList<>();
@@ -38,6 +40,7 @@ public class CreateCourseRequestDto {
         return Course.builder()
                 .title(title)
                 .tags(tags)
+                .price(price)
                 .category(Category.builder().name(category).build())
                 .description(description)
                 .subscriptionType(subscriptionType)

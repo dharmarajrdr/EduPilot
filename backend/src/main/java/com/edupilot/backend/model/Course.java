@@ -57,6 +57,12 @@ public class Course extends AuditCreation {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "course")
     private List<Certificate> certificates;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Double price = 0.0;
+
+    private CourseOffer courseOffer;
+
     @ManyToMany
     @JoinTable(
             name = "course_tag",
