@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.edupilot.backend.custom_exception.AccountAlreadyRegistered;
 import com.edupilot.backend.custom_exception.ChapterAlreadyExist;
 import com.edupilot.backend.custom_exception.CommentNotFound;
+import com.edupilot.backend.custom_exception.CourseAlreadyEnrolled;
 import com.edupilot.backend.custom_exception.CourseNotFound;
 import com.edupilot.backend.custom_exception.DuplicateCourseByInstructor;
 import com.edupilot.backend.custom_exception.FeatureNotImplementedYet;
@@ -158,6 +159,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(LearnerNotFollowingYet.class)
     public ResponseEntity<BaseResponseDto> learnerNotFollowingYet(LearnerNotFollowingYet e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
+
+    @ExceptionHandler(CourseAlreadyEnrolled.class)
+    public ResponseEntity<BaseResponseDto> courseAlreadyEnrolled(CourseAlreadyEnrolled e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
         );
