@@ -27,8 +27,11 @@ public class Instructor extends AuditCreation {
     @OneToMany(mappedBy = "instructor")
     private List<Skill> skills;
 
+    @Builder.Default
+    private boolean verified = false;
+
     @OneToMany
-    private List<Rating> ratings;;
+    private List<Rating> ratings;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
