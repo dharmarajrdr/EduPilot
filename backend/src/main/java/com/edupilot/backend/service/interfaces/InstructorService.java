@@ -10,4 +10,8 @@ public interface InstructorService {
     public Instructor findInstructorByUser(User user);
 
     public Instructor save(Instructor instructor);
+
+    public Instructor verified(Instructor instructor);
+
+    public void delete(Instructor instructor);
 }

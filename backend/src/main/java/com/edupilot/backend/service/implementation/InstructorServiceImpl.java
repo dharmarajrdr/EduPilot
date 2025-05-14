@@ -47,4 +47,25 @@ public class InstructorServiceImpl implements InstructorService {
 
         return instructorRepository.save(instructor);
     }
+
+    /**
+     * @param instructor
+     * @return
+     */
+    @Override
+    public Instructor verified(Instructor instructor) {
+
+        instructor.setVerified(true);
+        return instructorRepository.save(instructor);
+    }
+
+    /**
+     * @param instructor
+     * @return
+     */
+    @Override
+    public void delete(Instructor instructor) {
+
+        instructorRepository.delete(instructor);
+    }
 }

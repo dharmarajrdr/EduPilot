@@ -4,8 +4,10 @@ import com.edupilot.backend.dto.request.NotificationDto;
 import com.edupilot.backend.model.User;
 import com.edupilot.backend.service.interfaces.NotificationService;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+@Primary
 @Service
 @AllArgsConstructor
 public class EmailNotificationService implements NotificationService {
