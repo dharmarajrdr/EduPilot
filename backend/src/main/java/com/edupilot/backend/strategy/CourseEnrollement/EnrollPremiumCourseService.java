@@ -1,5 +1,6 @@
 package com.edupilot.backend.strategy.CourseEnrollement;
 
+import com.edupilot.backend.custom_exception.FeatureNotImplementedYet;
 import com.edupilot.backend.model.Course;
 import com.edupilot.backend.model.Learner;
 import com.edupilot.backend.model.LearnerCourse;
@@ -18,6 +19,6 @@ public class EnrollPremiumCourseService implements EnrollCourseService {
     @Override
     public LearnerCourse enroll(Course course, Learner learner) {
 
-        return null;
+        throw new FeatureNotImplementedYet("Enrolling premium course requires course purchase");
     }
 }
