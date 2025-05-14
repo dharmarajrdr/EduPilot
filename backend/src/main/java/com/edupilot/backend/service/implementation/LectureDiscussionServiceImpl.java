@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class LectureDiscussionImpl implements LectureDiscussionService {
+public class LectureDiscussionServiceImpl implements LectureDiscussionService {
 
     private final CommentService commentService;
     private final LectureService lectureService;
