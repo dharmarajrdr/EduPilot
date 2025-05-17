@@ -107,6 +107,7 @@ public class CourseServiceImpl implements CourseService {
      * @param userId
      * @param courseId
      * @param courseStatus
+     * @return Course
      */
     private Course updateCourseStatus(Long userId, Long courseId, CourseStatus courseStatus) {
 
@@ -152,7 +153,7 @@ public class CourseServiceImpl implements CourseService {
         for (Learner learner : followers) {
             String message = "Hey " + learner.getUser().getDisplayName() + "! Your favourite instructor '" + instructor.getUser().getDisplayName() + "' has published a course '" + course.getTitle() + "'.";
             NotificationDto notificationDto = NotificationDto.builder().fromUser(adminUser).toUser(learner.getUser()).message(message).subject(subject).build();
-            notificationService.notify(notificationDto);
+            notificationService.notifyAsync(notificationDto);
         }
     }
 

@@ -15,7 +15,17 @@ public class PhoneNotificationService implements NotificationService {
      * @param notificationDto
      */
     @Override
-    public void notify(NotificationDto notificationDto) {
+    public void notifySync(NotificationDto notificationDto) {
+
+    }
+
+    /**
+     * Notify over phone
+     *
+     * @param notificationDto
+     */
+    @Override
+    public void notifyAsync(NotificationDto notificationDto) {
 
     }
 }

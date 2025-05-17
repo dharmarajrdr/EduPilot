@@ -18,7 +18,7 @@ public class EmailNotificationService implements NotificationService {
      * @param notificationDto
      */
     @Override
-    public void notify(NotificationDto notificationDto) {
+    public void notifySync(NotificationDto notificationDto) {
 
         User fromUser = notificationDto.getFromUser();
         User toUser = notificationDto.getToUser();
@@ -30,5 +30,13 @@ public class EmailNotificationService implements NotificationService {
         System.out.println("Subject: " + subject);
         System.out.println(message);
         System.out.println("=========================================================");
+    }
+
+    /**
+     * @param notificationDto
+     */
+    @Override
+    public void notifyAsync(NotificationDto notificationDto) {
+
     }
 }

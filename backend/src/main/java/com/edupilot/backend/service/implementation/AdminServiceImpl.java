@@ -53,7 +53,7 @@ public class AdminServiceImpl implements AdminService {
                 .subject("Role 'Instructor' Approved.")
                 .message("Your account has been approved for the role 'Instructor'. You can now upload courses on EduPilot platform.")
                 .build();
-        notificationService.notify(notificationDto);
+        notificationService.notifyAsync(notificationDto);
     }
 
     /**
@@ -77,7 +77,7 @@ public class AdminServiceImpl implements AdminService {
                 .subject("Role 'Instructor' rejected.")
                 .message("Your account has been rejected for the role 'Instructor'. Reason: " + rejectInstructorRequestDto.getReason())
                 .build();
-        notificationService.notify(notificationDto);
+        notificationService.notifyAsync(notificationDto);
     }
 
     /**
