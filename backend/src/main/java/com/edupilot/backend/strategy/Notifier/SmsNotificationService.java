@@ -1,13 +1,17 @@
 package com.edupilot.backend.strategy.Notifier;
 
 import com.edupilot.backend.dto.request.NotificationDto;
+import com.edupilot.backend.kafka.NotificationService.producer.NotificationProducer;
+import com.edupilot.backend.model.enums.NotificationTopic;
 import com.edupilot.backend.service.interfaces.NotificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class PhoneNotificationService implements NotificationService {
+public class SmsNotificationService implements NotificationService {
+
+    private final NotificationProducer notificationProducer;
 
     /**
      * Notify over phone
@@ -27,5 +31,6 @@ public class PhoneNotificationService implements NotificationService {
     @Override
     public void notifyAsync(NotificationDto notificationDto) {
 
+        notificationProducer.send(notificationDto, NotificationTopic.SMS);
     }
 }
