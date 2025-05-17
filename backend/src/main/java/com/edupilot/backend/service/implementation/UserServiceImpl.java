@@ -10,10 +10,7 @@ import com.edupilot.backend.model.Learner;
 import com.edupilot.backend.model.User;
 import com.edupilot.backend.model.enums.UserType;
 import com.edupilot.backend.repository.UserRepository;
-import com.edupilot.backend.service.interfaces.AccountService;
-import com.edupilot.backend.service.interfaces.InstructorService;
-import com.edupilot.backend.service.interfaces.LearnerService;
-import com.edupilot.backend.service.interfaces.UserService;
+import com.edupilot.backend.service.interfaces.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +28,6 @@ public class UserServiceImpl implements UserService {
      * Create a new user
      *
      * @param signupUserRequestDto
-     * @return
      */
     @Override
     @Transactional
@@ -58,8 +54,11 @@ public class UserServiceImpl implements UserService {
                 learnerService.save(Learner.builder().user(user).build());
                 break;
             }
-            default: {
+            case ADMIN: {
                 throw new NewAdminCreationRestricted();
+            }
+            default: {
+                throw new IllegalStateException("Unexpected user type: " + user.getUserType());
             }
         }
     }
@@ -68,7 +67,7 @@ public class UserServiceImpl implements UserService {
      * Check whether the given userName exists or not
      *
      * @param username
-     * @return
+     * @return Boolean
      */
     @Override
     public Boolean existsByUsername(String username) {
@@ -80,7 +79,7 @@ public class UserServiceImpl implements UserService {
      * Get the user by id
      *
      * @param userId
-     * @return
+     * @return User
      */
     @Override
     public User findUserById(Long userId) {

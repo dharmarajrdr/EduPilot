@@ -4,5 +4,7 @@ import com.edupilot.backend.dto.request.NotificationDto;
 
 public interface NotificationService {
 
-    public void notify(NotificationDto notificationDto);
+    public void notifySync(NotificationDto notificationDto);
+
+    public void notifyAsync(NotificationDto notificationDto);
 }

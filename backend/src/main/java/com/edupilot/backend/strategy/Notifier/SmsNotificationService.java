@@ -8,44 +8,36 @@ import com.edupilot.backend.service.interfaces.NotificationService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-@Primary
 @Service
 @AllArgsConstructor
-public class EmailNotificationService implements NotificationService {
+public class SmsNotificationService implements NotificationService {
 
     private final NotificationProducer notificationProducer;
-    private final Logger logger = LoggerFactory.getLogger(EmailNotificationService.class);
+    private final Logger logger = LoggerFactory.getLogger(SmsNotificationService.class);
 
     /**
-     * Notify message via email
+     * Notify over phone
      *
      * @param notificationDto
      */
     @Override
     public void notifySync(NotificationDto notificationDto) {
 
-        User fromUser = notificationDto.getFromUser();
         User toUser = notificationDto.getToUser();
-        String subject = notificationDto.getSubject();
-        String message = notificationDto.getMessage();
-
-        logger.info("---------------------------------------------------------------");
-        logger.info("from: {}", fromUser.getAccount().getEmail());
-        logger.info("to: {}", toUser.getAccount().getEmail());
-        logger.info("Subject: {}", subject);
-        logger.info("Message: {}", message);
-        logger.info("---------------------------------------------------------------");
+        String phoneNumber = toUser.getAccount().getPhoneNumber();
+        logger.info("Sent sms to {}", phoneNumber);
     }
 
     /**
+     * Notify over phone
+     *
      * @param notificationDto
      */
     @Override
     public void notifyAsync(NotificationDto notificationDto) {
 
-        notificationProducer.send(notificationDto, NotificationTopic.EMAIL);
+        notificationProducer.send(notificationDto, NotificationTopic.SMS);
     }
 }
