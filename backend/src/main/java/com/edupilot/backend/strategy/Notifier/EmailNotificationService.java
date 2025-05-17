@@ -6,6 +6,8 @@ import com.edupilot.backend.model.User;
 import com.edupilot.backend.model.enums.NotificationTopic;
 import com.edupilot.backend.service.interfaces.NotificationService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class EmailNotificationService implements NotificationService {
 
     private final NotificationProducer notificationProducer;
+    private final Logger logger = LoggerFactory.getLogger(EmailNotificationService.class);
 
     /**
      * Notify message via email
@@ -28,12 +31,13 @@ public class EmailNotificationService implements NotificationService {
         User toUser = notificationDto.getToUser();
         String subject = notificationDto.getSubject();
         String message = notificationDto.getMessage();
-        System.out.println("=========================================================");
-        System.out.println("from: " + fromUser.getAccount().getEmail());
-        System.out.println("to: " + toUser.getAccount().getEmail());
-        System.out.println("Subject: " + subject);
-        System.out.println(message);
-        System.out.println("=========================================================");
+
+        logger.info("---------------------------------------------------------------");
+        logger.info("from: {}", fromUser.getAccount().getEmail());
+        logger.info("to: {}", toUser.getAccount().getEmail());
+        logger.info("Subject: {}", subject);
+        logger.info("Message: {}", message);
+        logger.info("---------------------------------------------------------------");
     }
 
     /**
