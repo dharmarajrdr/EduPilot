@@ -76,4 +76,21 @@ public class Course extends AuditCreation {
         return instructor.getUser().equals(user);
     }
 
+    public long getDiscountAppliedPrice() {
+
+        if (courseOffer == null) {
+            return Long.parseLong(price.toString());
+        }
+
+        LocalDateTime discountUntil = courseOffer.getUntilDate();
+        if (discountUntil == null || discountUntil.isAfter(LocalDateTime.now())) {
+            return Long.parseLong(price.toString());
+        }
+
+        double discountPercent = courseOffer.getPercentage();
+        double discountPrice = (discountPercent / 100) * price;
+        double priceAfterDiscount = price - discountPrice;
+        return Long.parseLong(Double.toString(priceAfterDiscount));
+    }
+
 }
