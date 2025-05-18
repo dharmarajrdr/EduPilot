@@ -2,10 +2,7 @@ package com.edupilot.backend.model;
 
 import com.edupilot.backend.model.base.AuditCreation;
 import com.edupilot.backend.model.enums.OrderStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Data
@@ -23,7 +20,9 @@ public class Order extends AuditCreation {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    @Builder.Default
+    private OrderStatus orderStatus = OrderStatus.IN_PROGRESS;
 
+    @Column(nullable = false)
     private Long price;
 }

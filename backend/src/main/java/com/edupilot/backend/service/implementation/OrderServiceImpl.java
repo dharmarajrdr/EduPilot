@@ -40,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = Order.builder()
                 .course(course)
                 .user(user)
-                .price(course.getDiscountAppliedPrice())
+                .price(999L)
                 .orderStatus(OrderStatus.IN_PROGRESS)
                 .build();
         return orderRepository.save(order);
