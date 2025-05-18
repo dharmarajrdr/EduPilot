@@ -8,8 +8,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 
-@Entity(name = "orders")
+@Data
 @Builder
+@Entity(name = "orders")
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -21,10 +22,8 @@ public class Order extends AuditCreation {
     @ManyToOne
     private User user;
 
-    @Getter
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    @Getter
     private Long price;
 }
