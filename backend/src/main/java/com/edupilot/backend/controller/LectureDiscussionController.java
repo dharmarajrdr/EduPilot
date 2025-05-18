@@ -1,6 +1,23 @@
 package com.edupilot.backend.controller;
 
-import com.edupilot.backend.dto.request.*;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.edupilot.backend.dto.request.AddReplyRequestDto;
+import com.edupilot.backend.dto.request.CreateCommentRequestDto;
+import com.edupilot.backend.dto.request.EditCommentRequestDto;
+import com.edupilot.backend.dto.request.EditReplyRequestDto;
 import com.edupilot.backend.dto.response.BaseResponseDto;
 import com.edupilot.backend.dto.response.CommentResponseDto;
 import com.edupilot.backend.dto.response.ReplyResponseDto;
@@ -8,16 +25,12 @@ import com.edupilot.backend.model.enums.ResponseStatus;
 import com.edupilot.backend.service.interfaces.CommentService;
 import com.edupilot.backend.service.interfaces.LectureDiscussionService;
 import com.edupilot.backend.service.interfaces.ReplyService;
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/v1/api/discussion")
+@RequestMapping("/api/v1/discussion")
 public class LectureDiscussionController {
 
     private final CommentService commentService;

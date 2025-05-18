@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/v1/api")
+@RequestMapping("/auth/v1")
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/user")
+    @PostMapping("/signup")
     public ResponseEntity<BaseResponseDto> signupUser(@RequestBody SignupUserRequestDto signupUserRequestDto) {
 
         userService.signupUser(signupUserRequestDto);
