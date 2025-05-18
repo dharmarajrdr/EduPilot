@@ -2,6 +2,7 @@ package com.edupilot.backend.service.implementation;
 
 import com.edupilot.backend.custom_exception.CourseAlreadyEnrolled;
 import com.edupilot.backend.custom_exception.PermissionDenied;
+import com.edupilot.backend.dto.response.CreatePaymentLinkResponseDto;
 import com.edupilot.backend.factory.EnrollCourseFactory;
 import com.edupilot.backend.model.Course;
 import com.edupilot.backend.model.Learner;
@@ -31,7 +32,7 @@ public class LearnerCourseServiceImpl implements LearnerCourseService {
      * @return
      */
     @Override
-    public LearnerCourse enrollCourse(Long courseId, Long userId) {
+    public CreatePaymentLinkResponseDto enrollCourse(Long courseId, Long userId) {
 
         User user = userService.findUserById(userId);
         if (!user.getUserType().equals(UserType.LEARNER)) {
@@ -49,5 +50,25 @@ public class LearnerCourseServiceImpl implements LearnerCourseService {
 
         EnrollCourseService enrollCourseService = enrollCourseFactory.getEnrollCourseService(course.getSubscriptionType());
         return enrollCourseService.enroll(course, learner);
+    }
+
+    /**
+     * Post payment of course purchase
+     *
+     * @param courseId
+     * @param userId
+     */
+    @Override
+    public void purchaseCourse(Long courseId, Long userId) {
+
+        User user = userService.findUserById(userId);
+        if (!user.getUserType().equals(UserType.LEARNER)) {
+            throw new PermissionDenied("Only learners can purchase courses");
+        }
+
+        Course course = courseService.getCourseById(courseId);
+        Learner learner = learnerService.findLearnerByUser(user);
+
+        learnerCourseRepository.save(new LearnerCourse(learner, course));
     }
 }

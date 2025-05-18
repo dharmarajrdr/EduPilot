@@ -1,8 +1,10 @@
 package com.edupilot.backend.service.interfaces;
 
-import com.edupilot.backend.model.LearnerCourse;
+import com.edupilot.backend.dto.response.CreatePaymentLinkResponseDto;
 
 public interface LearnerCourseService {
 
-    LearnerCourse enrollCourse(Long courseId, Long userId);;
+    CreatePaymentLinkResponseDto enrollCourse(Long courseId, Long userId);
+
+    void purchaseCourse(Long courseId, Long userId);
 }
