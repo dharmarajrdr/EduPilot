@@ -1,14 +1,15 @@
 package com.edupilot.backend.service.implementation;
 
 import com.edupilot.backend.custom_exception.AccountAlreadyRegistered;
-import com.edupilot.backend.custom_exception.NewAdminCreationRestricted;
 import com.edupilot.backend.custom_exception.UserNameAlreadyExist;
 import com.edupilot.backend.custom_exception.UserNotFound;
 import com.edupilot.backend.dto.request.SignupUserRequestDto;
+import com.edupilot.backend.model.Admin;
 import com.edupilot.backend.model.Instructor;
 import com.edupilot.backend.model.Learner;
 import com.edupilot.backend.model.User;
 import com.edupilot.backend.model.enums.UserType;
+import com.edupilot.backend.repository.AdminRepository;
 import com.edupilot.backend.repository.UserRepository;
 import com.edupilot.backend.service.interfaces.*;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final InstructorService instructorService;
     private final LearnerService learnerService;
+    private final AdminRepository adminRepository;
 
     /**
      * Create a new user
@@ -55,7 +57,8 @@ public class UserServiceImpl implements UserService {
                 break;
             }
             case ADMIN: {
-                throw new NewAdminCreationRestricted();
+                adminRepository.save(Admin.builder().user(user).build());
+                break;
             }
             default: {
                 throw new IllegalStateException("Unexpected user type: " + user.getUserType());

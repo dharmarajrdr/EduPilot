@@ -5,7 +5,7 @@ import com.edupilot.backend.model.User;
 
 public interface UserService {
 
-    void signupUser(SignupUserRequestDto signupUserRequestDto);
+    public void signupUser(SignupUserRequestDto signupUserRequestDto);
 
     Boolean existsByUsername(String username);
 
