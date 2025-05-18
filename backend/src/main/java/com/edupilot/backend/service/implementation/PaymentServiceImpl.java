@@ -1,5 +1,6 @@
 package com.edupilot.backend.service.implementation;
 
+import com.edupilot.backend.model.Course;
 import org.springframework.stereotype.Service;
 
 import com.edupilot.backend.machine_learning.PaymentServiceAnalyser;
@@ -25,10 +26,11 @@ public class PaymentServiceImpl {
      * @param orderId
      * @return String
      */
-    public String createPaymentLink(Long orderId) {
+    public String createPaymentLink(Long orderId) throws Exception {
 
         // 1. Get order info from orderService
         Order order = orderService.getOrderById(orderId);
+        Course course = order.getCourse();
         Long price = order.getPrice();
 
         // 2. Get better performant payment service
@@ -38,6 +40,6 @@ public class PaymentServiceImpl {
         PaymentService paymentService = paymentServiceRegistry.getPaymentService(paymentType);
 
         // 4. Create payment link
-        return paymentService.createPaymentLink(price);
+        return paymentService.createPaymentLink(course);
     }
 }
