@@ -1,5 +1,7 @@
 package com.edupilot.backend.service.implementation;
 
+import org.springframework.stereotype.Service;
+
 import com.edupilot.backend.custom_exception.CourseStripeNotFound;
 import com.edupilot.backend.model.Course;
 import com.edupilot.backend.model.CourseStripe;
@@ -12,8 +14,8 @@ import com.stripe.model.Product;
 import com.stripe.param.PaymentLinkCreateParams;
 import com.stripe.param.PriceCreateParams;
 import com.stripe.param.ProductCreateParams;
+
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
@@ -38,7 +40,7 @@ public class CourseStripeServiceImpl implements CourseStripeService {
                 .setDefaultPriceData(
                         ProductCreateParams.DefaultPriceData.builder()
                                 .setCurrency("inr")
-                                .setUnitAmount(Long.parseLong(course.getPrice().toString()))
+                                .setUnitAmount(999L)
                                 .build()
                 ).build();
 
@@ -57,7 +59,7 @@ public class CourseStripeServiceImpl implements CourseStripeService {
 
         PriceCreateParams params = PriceCreateParams.builder()
                 .setCurrency("inr")
-                .setUnitAmount(Long.parseLong(product.getDefaultPrice()))
+                .setUnitAmount(999L)
                 .setProduct(product.getId())
                 .build();
 
