@@ -3,6 +3,7 @@ package com.edupilot.backend.service.implementation;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.edupilot.backend.service.interfaces.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +23,6 @@ import com.edupilot.backend.model.User;
 import com.edupilot.backend.model.enums.CourseStatus;
 import com.edupilot.backend.model.enums.UserType;
 import com.edupilot.backend.repository.CourseRepository;
-import com.edupilot.backend.service.interfaces.AdminService;
-import com.edupilot.backend.service.interfaces.CategoryService;
-import com.edupilot.backend.service.interfaces.CourseService;
-import com.edupilot.backend.service.interfaces.InstructorService;
-import com.edupilot.backend.service.interfaces.NotificationService;
-import com.edupilot.backend.service.interfaces.TagService;
-import com.edupilot.backend.service.interfaces.UserService;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -40,8 +34,9 @@ public class CourseServiceImpl implements CourseService {
     private final NotificationService notificationService;
     private final TagService tagsService;
     private final UserService userService;
+    private final CourseStripeService courseStripeService;
 
-    public CourseServiceImpl(@Qualifier("emailNotificationService") NotificationService notificationService, UserService userService, TagService tagsService, AdminService adminService, CourseRepository courseRepository, CategoryService categoryService, InstructorService instructorService) {
+    public CourseServiceImpl(@Qualifier("emailNotificationService") NotificationService notificationService, UserService userService, TagService tagsService, AdminService adminService, CourseRepository courseRepository, CategoryService categoryService, InstructorService instructorService, CourseStripeService courseStripeService) {
         this.userService = userService;
         this.tagsService = tagsService;
         this.adminService = adminService;
@@ -49,6 +44,7 @@ public class CourseServiceImpl implements CourseService {
         this.courseRepository = courseRepository;
         this.instructorService = instructorService;
         this.notificationService = notificationService;
+        this.courseStripeService = courseStripeService;
     }
 
     private Category saveCategory(Category category) {
@@ -164,7 +160,7 @@ public class CourseServiceImpl implements CourseService {
      * @param userId
      */
     @Override
-    public void publishCourse(Long courseId, Long userId) {
+    public void publishCourse(Long courseId, Long userId) throws Exception {
 
         boolean isNewlyPublishing = getCourseById(courseId).getReleasedDate() == null;
 
@@ -172,6 +168,7 @@ public class CourseServiceImpl implements CourseService {
 
         if (isNewlyPublishing) {
 
+            courseStripeService.save(course);
             notifyCoursePublication(course);
         }
     }
