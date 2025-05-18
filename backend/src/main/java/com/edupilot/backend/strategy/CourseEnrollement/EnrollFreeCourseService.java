@@ -1,5 +1,6 @@
 package com.edupilot.backend.strategy.CourseEnrollement;
 
+import com.edupilot.backend.dto.response.CreatePaymentLinkResponseDto;
 import com.edupilot.backend.model.Course;
 import com.edupilot.backend.model.Learner;
 import com.edupilot.backend.model.LearnerCourse;
@@ -21,8 +22,13 @@ public class EnrollFreeCourseService implements EnrollCourseService {
      * @param learner
      */
     @Override
-    public LearnerCourse enroll(Course course, Learner learner) {
+    public CreatePaymentLinkResponseDto enroll(Course course, Learner learner) {
 
-        return learnerCourseRepository.save(new LearnerCourse(learner, course));
+        learnerCourseRepository.save(new LearnerCourse(learner, course));
+
+        return CreatePaymentLinkResponseDto.builder()
+                .paymentRequired(false)
+                .message("Successfully enrolled the course.")
+                .build();
     }
 }

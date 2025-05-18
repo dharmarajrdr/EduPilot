@@ -1,10 +1,12 @@
 package com.edupilot.backend.strategy.CourseEnrollement;
 
+import com.edupilot.backend.dto.response.CreatePaymentLinkResponseDto;
 import com.edupilot.backend.model.Course;
 import com.edupilot.backend.model.Learner;
-import com.edupilot.backend.model.LearnerCourse;
-import com.edupilot.backend.repository.LearnerCourseRepository;
+import com.edupilot.backend.model.Order;
+import com.edupilot.backend.service.implementation.PaymentServiceImpl;
 import com.edupilot.backend.service.interfaces.EnrollCourseService;
+import com.edupilot.backend.service.interfaces.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,8 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class EnrollPartiallyPremiumCourseService implements EnrollCourseService {
 
-    private final LearnerCourseRepository learnerCourseRepository;
+    private final OrderService orderService;
+    private final PaymentServiceImpl paymentServiceImpl;
 
     /**
      * Enroll course
@@ -21,8 +24,20 @@ public class EnrollPartiallyPremiumCourseService implements EnrollCourseService 
      * @param learner
      */
     @Override
-    public LearnerCourse enroll(Course course, Learner learner) {
+    public CreatePaymentLinkResponseDto enroll(Course course, Learner learner) {
 
-        return learnerCourseRepository.save(new LearnerCourse(learner, course));
+        try {
+            Order order = orderService.placeOrder(course, learner.getUser());
+            String url = paymentServiceImpl.createPaymentLink(order.getId());
+            return CreatePaymentLinkResponseDto.builder()
+                    .paymentRequired(true)
+                    .url(url)
+                    .message("Payment link created.")
+                    .orderId(order.getId())
+                    .build();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
