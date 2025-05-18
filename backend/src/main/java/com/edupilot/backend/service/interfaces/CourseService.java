@@ -10,7 +10,7 @@ public interface CourseService {
 
     Course getCourseById(Long courseId);
 
-    void publishCourse(Long courseId, Long userId) throws Exception;
+    void publishCourse(Long courseId, Long userId) throws RuntimeException;
 
     void archiveCourse(Long courseId, Long userId);
 }

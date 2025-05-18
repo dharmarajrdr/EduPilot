@@ -3,7 +3,7 @@ package com.edupilot.backend.controller;
 import com.edupilot.backend.dto.request.CreateCourseRequestDto;
 import com.edupilot.backend.dto.response.BaseResponseDto;
 import com.edupilot.backend.dto.response.CreateCourseResponseDto;
-import com.edupilot.backend.model.LearnerCourse;
+import com.edupilot.backend.dto.response.CreatePaymentLinkResponseDto;
 import com.edupilot.backend.model.enums.ResponseStatus;
 import com.edupilot.backend.service.interfaces.CourseService;
 import com.edupilot.backend.service.interfaces.LearnerCourseService;
@@ -47,8 +47,11 @@ public class CourseController {
     @PostMapping("/{courseId}/enroll")
     public ResponseEntity<BaseResponseDto> enrollCourse(@PathVariable Long courseId, @RequestParam Long userId) {
 
-        LearnerCourse learnerCourse = learnerCourseService.enrollCourse(courseId, userId);
-        BaseResponseDto responseDto = BaseResponseDto.builder().message("Course enrolled successfully.").status(ResponseStatus.SUCCESS).build();
+        CreatePaymentLinkResponseDto createPaymentLinkResponseDto = learnerCourseService.enrollCourse(courseId, userId);
+        BaseResponseDto responseDto = BaseResponseDto.builder()
+                .data(createPaymentLinkResponseDto)
+                .status(ResponseStatus.SUCCESS)
+                .build();
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 }

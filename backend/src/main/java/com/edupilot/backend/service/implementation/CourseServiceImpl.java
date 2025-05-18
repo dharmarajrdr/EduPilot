@@ -3,7 +3,9 @@ package com.edupilot.backend.service.implementation;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.edupilot.backend.model.enums.SubscriptionType;
 import com.edupilot.backend.service.interfaces.*;
+import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ import com.edupilot.backend.model.User;
 import com.edupilot.backend.model.enums.CourseStatus;
 import com.edupilot.backend.model.enums.UserType;
 import com.edupilot.backend.repository.CourseRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -87,6 +90,10 @@ public class CourseServiceImpl implements CourseService {
 
         if (courseRepository.existsCourseByTitleAndInstructor(course.getTitle(), course.getInstructor())) {
             throw new DuplicateCourseByInstructor(course);
+        }
+
+        if (!course.getSubscriptionType().equals(SubscriptionType.FREE) && course.getPrice() <= 0.0) {
+            throw new IllegalStateException("Course price should be greater than 0 for subscription type '" + course.getSubscriptionType() + "'");
         }
 
         course.setCategory(saveCategory(course.getCategory())); // save before referring
@@ -160,7 +167,8 @@ public class CourseServiceImpl implements CourseService {
      * @param userId
      */
     @Override
-    public void publishCourse(Long courseId, Long userId) throws Exception {
+    @Transactional
+    public void publishCourse(Long courseId, Long userId) throws RuntimeException {
 
         boolean isNewlyPublishing = getCourseById(courseId).getReleasedDate() == null;
 
@@ -168,8 +176,12 @@ public class CourseServiceImpl implements CourseService {
 
         if (isNewlyPublishing) {
 
-            courseStripeService.save(course);
-            notifyCoursePublication(course);
+            try {
+                courseStripeService.save(course);
+                notifyCoursePublication(course);
+            } catch (StripeException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
