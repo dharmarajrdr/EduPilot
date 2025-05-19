@@ -3,6 +3,8 @@ package com.edupilot.backend.service.interfaces;
 import com.edupilot.backend.dto.request.*;
 import com.edupilot.backend.dto.response.CommentResponseDto;
 import com.edupilot.backend.dto.response.ReplyResponseDto;
+import com.edupilot.backend.model.Comment;
+import com.edupilot.backend.model.Lecture;
 
 import java.util.List;
 
@@ -19,4 +21,6 @@ public interface LectureDiscussionService {
     List<CommentResponseDto> getDiscussions(Long courseId, Long lectureId, Long userId);
 
     List<ReplyResponseDto> getReplies(Long courseId, Long lectureId, Long commentId, Long userId);
+
+    void notifyTopicListeners(Lecture lecture, Comment comment);
 }

@@ -9,6 +9,7 @@ import com.edupilot.backend.model.*;
 import com.edupilot.backend.repository.LectureDiscussionRepository;
 import com.edupilot.backend.service.interfaces.*;
 import lombok.AllArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class LectureDiscussionServiceImpl implements LectureDiscussionService {
     private final LectureDiscussionRepository lectureDiscussionRepository;
     private final ReplyService replyService;
     private final UserService userService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     /**
      * Create a new comment
@@ -40,6 +42,7 @@ public class LectureDiscussionServiceImpl implements LectureDiscussionService {
         LectureDiscussion lectureDiscussion = lectureDiscussionRepository.save(LectureDiscussion.builder().lecture(lecture).comment(comment).build());
         CommentResponseDto commentResponseDto = CommentResponseDto.fromComment(comment);
         commentResponseDto.setDiscussionId(lectureDiscussion.getId());
+        notifyTopicListeners(lecture, comment);
         return commentResponseDto;
     }
 
@@ -157,5 +160,25 @@ public class LectureDiscussionServiceImpl implements LectureDiscussionService {
             replyResponseDtos.add(ReplyResponseDto.fromReply(reply));
         }
         return replyResponseDtos;
+    }
+
+    private String getTopicName(Lecture lecture) {
+
+        Course course = lecture.getCourse();
+
+        return "C_" + course.getId() + "_L_" + lecture.getId();
+    }
+
+    /**
+     * Notify the listeners
+     *
+     * @param lecture
+     * @param comment
+     */
+    @Override
+    public void notifyTopicListeners(Lecture lecture, Comment comment) {
+
+        String topicName = getTopicName(lecture);
+        simpMessagingTemplate.convertAndSend("/topic/" + topicName, comment);
     }
 }
