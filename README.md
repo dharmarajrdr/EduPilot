@@ -50,28 +50,16 @@
 
 ## ⚙️ Tech Stack
 
-| Layer        | Technology                  |
+| Layer        | Technology                   |
 |--------------|------------------------------|
-| Frontend     | React.js, TailwindCSS        |
-| Backend      | Spring Boot / Node.js        |
+| Backend      | Spring Boot                  |
 | Database     | PostgreSQL, Redis            |
+| Frontend     | React.js, TailwindCSS        |
 | Video Storage| AWS S3 + CloudFront / Flixify|
 | Auth         | JWT + OAuth (Google/GitHub)  |
-| Payments     | Razorpay / Stripe            |
+| Payments     | Razorpay & Stripe            |
 | DevOps       | Docker, Nginx, PM2, GitHub Actions |
 | Meetings     | Zoom / Google Meet API       |
-
----
-
-## 📌 MVP Roadmap
-
-| Phase | Milestone                                      | Timeline   |
-|-------|------------------------------------------------|------------|
-| 1     | Auth, Learner Dashboard, Course Purchase       | Week 1–2   |
-| 2     | Course Creation, Video Uploads                 | Week 3–4   |
-| 3     | Quizzes, Certificates, Group Chat              | Week 5–6   |
-| 4     | Feeds, Profiles, Skill Badging                 | Week 7     |
-| 5     | Admin Panel, Analytics, UI Polish              | Week 8     |
 
 ---
 
