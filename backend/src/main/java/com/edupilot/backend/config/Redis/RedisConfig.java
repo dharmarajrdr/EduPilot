@@ -1,6 +1,5 @@
 package com.edupilot.backend.config.Redis;
 
-import com.edupilot.backend.dto.response.BaseResponseDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -16,7 +15,7 @@ import java.time.Duration;
  * This config sets up a RedisCacheManager with the following settings:
  * - Entries expire after 10 minutes
  * - Null values are not cached
- * - Values are serialized using Jackson (for BaseResponseDto)
+ * - Values are serialized using Jackson
  */
 @Configuration
 public class RedisConfig {
@@ -37,7 +36,7 @@ public class RedisConfig {
                 .disableCachingNullValues()        // Avoid caching null values to prevent unnecessary usage
                 .serializeValuesWith(              // Use Jackson serializer for serializing values
                         RedisSerializationContext.SerializationPair.fromSerializer(
-                                new Jackson2JsonRedisSerializer<>(BaseResponseDto.class)
+                                new Jackson2JsonRedisSerializer<>(Object.class)
                         )
                 );
 
