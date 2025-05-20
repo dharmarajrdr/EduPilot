@@ -1,29 +1,11 @@
 package com.edupilot.backend.util;
 
+import com.edupilot.backend.custom_exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.edupilot.backend.custom_exception.AccountAlreadyRegistered;
-import com.edupilot.backend.custom_exception.ChapterAlreadyExist;
-import com.edupilot.backend.custom_exception.CommentNotFound;
-import com.edupilot.backend.custom_exception.CourseAlreadyEnrolled;
-import com.edupilot.backend.custom_exception.CourseNotFound;
-import com.edupilot.backend.custom_exception.DuplicateCourseByInstructor;
-import com.edupilot.backend.custom_exception.FeatureNotImplementedYet;
-import com.edupilot.backend.custom_exception.FlixifyVideoDeleteException;
-import com.edupilot.backend.custom_exception.InstructorNotFound;
-import com.edupilot.backend.custom_exception.LearnerAlreadyFollowing;
-import com.edupilot.backend.custom_exception.LearnerNotFollowingYet;
-import com.edupilot.backend.custom_exception.LearnerNotFound;
-import com.edupilot.backend.custom_exception.LectureDiscussionNotFound;
-import com.edupilot.backend.custom_exception.LectureNotFound;
-import com.edupilot.backend.custom_exception.NewAdminCreationRestricted;
-import com.edupilot.backend.custom_exception.PermissionDenied;
-import com.edupilot.backend.custom_exception.ReplyNotFound;
-import com.edupilot.backend.custom_exception.UserNameAlreadyExist;
-import com.edupilot.backend.custom_exception.UserNotFound;
 import com.edupilot.backend.dto.response.BaseResponseDto;
 import com.edupilot.backend.model.enums.ResponseStatus;
 
@@ -167,6 +149,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CourseAlreadyEnrolled.class)
     public ResponseEntity<BaseResponseDto> courseAlreadyEnrolled(CourseAlreadyEnrolled e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
+        );
+    }
+
+    @ExceptionHandler(CategoryNotFound.class)
+    public ResponseEntity<BaseResponseDto> categoryNotFound(CategoryNotFound e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 BaseResponseDto.builder().message(e.getMessage()).status(ResponseStatus.FAILURE).build()
         );
     }
